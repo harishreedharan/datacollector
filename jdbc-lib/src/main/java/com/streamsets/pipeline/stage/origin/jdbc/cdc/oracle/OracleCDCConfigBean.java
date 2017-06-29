@@ -98,12 +98,25 @@ public class OracleCDCConfigBean {
   )
   public long logminerWindow;
 
+  // TODO: Add a drop down that depends on this, which asks whether the buffering should be in memory or on disk.
+  @ConfigDef(
+      required = true,
+      type = ConfigDef.Type.BOOLEAN,
+      label = "Buffer Changes in SDC Memory",
+      description = "Buffer changes in SDC memory. Use this to reduce PGA memory usage on the DB, " +
+          "but higher heap size is required for the SDC",
+      displayPosition = 80,
+      group = "CDC",
+      defaultValue = "false"
+  )
+  public boolean bufferLocally;
+
   @ConfigDef(
       required = true,
       type = ConfigDef.Type.MODEL,
       label = "Dictionary Source",
       description = "Location of the LogMiner dictionary",
-      displayPosition = 80,
+      displayPosition = 90,
       group = "CDC"
   )
   @ValueChooserModel(DictionaryChooserValues.class)
