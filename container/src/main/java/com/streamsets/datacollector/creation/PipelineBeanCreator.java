@@ -240,7 +240,8 @@ public abstract class PipelineBeanCreator {
             errors
         );
       } else if (!(pipelineConfigBean.executionMode.equals(ExecutionMode.BATCH) ||
-          pipelineConfigBean.executionMode.equals(ExecutionMode.STREAMING))) {
+          pipelineConfigBean.executionMode.equals(ExecutionMode.STREAMING) ||
+          pipelineConfigBean.executionMode.equals(ExecutionMode.SQL))) {
         errors.add(IssueCreator.getPipeline().create(
             PipelineGroups.BAD_RECORDS.name(),
             "badRecordsHandling",

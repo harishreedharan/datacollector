@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 StreamSets Inc.
+ * Copyright 2019 StreamSets Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,12 @@
  */
 package com.streamsets.datacollector.config;
 
-import com.streamsets.pipeline.api.ExecutionMode;
 import com.streamsets.pipeline.api.base.BaseEnumChooserValues;
 
-public class ExecutionModeChooserValues extends BaseEnumChooserValues<ExecutionMode> {
+public class SQLDialectChooserValues extends BaseEnumChooserValues<SQLDialect> {
 
-  public ExecutionModeChooserValues() {
-    super(
-        ExecutionMode.STANDALONE,
-        ExecutionMode.CLUSTER_BATCH,
-        ExecutionMode.CLUSTER_YARN_STREAMING,
-        ExecutionMode.CLUSTER_MESOS_STREAMING,
-        ExecutionMode.EDGE,
-        ExecutionMode.EMR_BATCH,
-        ExecutionMode.BATCH,
-        ExecutionMode.STREAMING,
-        ExecutionMode.SQL
-    );
+  public SQLDialectChooserValues() {
+    super(SQLDialect.class);
   }
+
 }

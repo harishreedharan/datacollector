@@ -15,22 +15,26 @@
  */
 package com.streamsets.datacollector.config;
 
-import com.streamsets.pipeline.api.ExecutionMode;
-import com.streamsets.pipeline.api.base.BaseEnumChooserValues;
+import com.streamsets.pipeline.api.ConfigDef;
+import com.streamsets.pipeline.api.credential.CredentialValue;
 
-public class ExecutionModeChooserValues extends BaseEnumChooserValues<ExecutionMode> {
+public class ConnectionPropertyBean {
+  @ConfigDef(
+      required = true,
+      type = ConfigDef.Type.STRING,
+      label = "Name",
+      displayPosition = 10,
+      group = "JDBC"
+  )
+  public String key;
 
-  public ExecutionModeChooserValues() {
-    super(
-        ExecutionMode.STANDALONE,
-        ExecutionMode.CLUSTER_BATCH,
-        ExecutionMode.CLUSTER_YARN_STREAMING,
-        ExecutionMode.CLUSTER_MESOS_STREAMING,
-        ExecutionMode.EDGE,
-        ExecutionMode.EMR_BATCH,
-        ExecutionMode.BATCH,
-        ExecutionMode.STREAMING,
-        ExecutionMode.SQL
-    );
-  }
+  @ConfigDef(
+      required = true,
+      type = ConfigDef.Type.CREDENTIAL,
+      label = "Value",
+      displayPosition = 20,
+      group = "JDBC"
+  )
+  public CredentialValue value;
+
 }

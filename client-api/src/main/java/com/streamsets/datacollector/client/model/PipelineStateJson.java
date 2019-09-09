@@ -80,7 +80,8 @@ public class PipelineStateJson   {
     EDGE("EDGE"),
     EMR_BATCH("EMR_BATCH"),
     BATCH("BATCH"),
-    STREAMING("STREAMING")
+    STREAMING("STREAMING"),
+    SQL("SQL")
     ;
 
     private final String value;

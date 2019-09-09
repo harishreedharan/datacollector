@@ -1302,6 +1302,8 @@ public class BeanHelper {
         return ExecutionModeJson.BATCH;
       case STREAMING:
         return ExecutionModeJson.STREAMING;
+      case SQL:
+        return ExecutionModeJson.SQL;
       default:
         throw new IllegalArgumentException("Unrecognized execution mode: " + executionMode);
     }
@@ -1333,6 +1335,8 @@ public class BeanHelper {
         return ExecutionMode.BATCH;
       case STREAMING:
         return ExecutionMode.STREAMING;
+      case SQL:
+        return ExecutionMode.SQL;
       default:
         throw new IllegalArgumentException("Unrecognized execution mode: " + executionModeJson);
     }

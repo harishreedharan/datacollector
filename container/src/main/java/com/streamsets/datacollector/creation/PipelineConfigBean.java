@@ -17,6 +17,7 @@ package com.streamsets.datacollector.creation;
 
 import com.streamsets.datacollector.config.AmazonEMRConfig;
 import com.streamsets.datacollector.config.ClusterConfig;
+import com.streamsets.datacollector.config.ConnectionPropertyBean;
 import com.streamsets.datacollector.config.DatabricksConfig;
 import com.streamsets.datacollector.config.DeliveryGuaranteeChooserValues;
 import com.streamsets.datacollector.config.ErrorHandlingChooserValues;
@@ -32,6 +33,8 @@ import com.streamsets.datacollector.config.PipelineState;
 import com.streamsets.datacollector.config.PipelineStateChooserValues;
 import com.streamsets.datacollector.config.PipelineTestStageChooserValues;
 import com.streamsets.datacollector.config.PipelineWebhookConfig;
+import com.streamsets.datacollector.config.SQLDialect;
+import com.streamsets.datacollector.config.SQLDialectChooserValues;
 import com.streamsets.datacollector.config.StatsTargetChooserValues;
 import com.streamsets.pipeline.api.ConfigDef;
 import com.streamsets.pipeline.api.ConfigDefBean;
@@ -45,7 +48,9 @@ import com.streamsets.pipeline.api.MultiValueChooserModel;
 import com.streamsets.pipeline.api.Stage;
 import com.streamsets.pipeline.api.StageDef;
 import com.streamsets.pipeline.api.ValueChooserModel;
+import com.streamsets.pipeline.api.credential.CredentialValue;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +68,7 @@ import java.util.Map;
 @ConfigGroups(PipelineGroups.class)
 public class PipelineConfigBean implements Stage {
 
-  public static final int VERSION = 16;
+  public static final int VERSION = 17;
 
   public static final String DEFAULT_STATS_AGGREGATOR_LIBRARY_NAME = "streamsets-datacollector-basic-lib";
 
@@ -102,11 +107,78 @@ public class PipelineConfigBean implements Stage {
       required = true,
       type = ConfigDef.Type.MODEL,
       label = "Execution Mode",
-      defaultValue= "STANDALONE",
+      defaultValue = "STANDALONE",
       displayPosition = 10
   )
   @ValueChooserModel(ExecutionModeChooserValues.class)
   public ExecutionMode executionMode;
+
+  @ConfigDef(
+      required = true,
+      type = ConfigDef.Type.STRING,
+      label = "JDBC Connection String",
+      defaultValue = "",
+      displayPosition = 15,
+      dependsOn = "executionMode",
+      triggeredByValue = "SQL"
+  )
+  public String connectionString;
+
+  @ConfigDef(
+      required = true,
+      type = ConfigDef.Type.CREDENTIAL,
+      dependsOn = "executionMode",
+      triggeredByValue = "SQL",
+      label = "Username",
+      displayPosition = 20
+  )
+  public CredentialValue username;
+
+  @ConfigDef(
+      required = true,
+      type = ConfigDef.Type.CREDENTIAL,
+      dependsOn = "executionMode",
+      triggeredByValue = "SQL",
+      label = "Password",
+      displayPosition = 25
+  )
+  public CredentialValue password;
+
+  @ConfigDef(
+      required = true,
+      type = ConfigDef.Type.MODEL,
+      label = "SQL Dialect",
+      defaultValue = "SNOWFLAKE",
+      dependsOn = "executionMode",
+      triggeredByValue = "SQL",
+      displayPosition = 30
+  )
+  @ValueChooserModel(SQLDialectChooserValues.class)
+  public SQLDialect sqlDialect;
+
+  @ConfigDef(
+      required = false,
+      type = ConfigDef.Type.STRING,
+      label = "JDBC Driver Class Name",
+      description = "Class name for pre-JDBC 4 compliant drivers.",
+      displayPosition = 40,
+      dependsOn = "executionMode",
+      triggeredByValue = "SQL"
+  )
+  public String driverClassName = "";
+
+  @ConfigDef(
+      required = false,
+      type = ConfigDef.Type.MODEL,
+      defaultValue = "[]",
+      label = "Additional JDBC Configuration Properties",
+      description = "Additional properties to pass to the underlying JDBC driver.",
+      displayPosition = 999,
+      dependsOn = "executionMode",
+      triggeredByValue = "SQL"
+  )
+  @ListBeanModel
+  public List<ConnectionPropertyBean> driverProperties = new ArrayList<>();
 
   @ConfigDef(
       required = true,
