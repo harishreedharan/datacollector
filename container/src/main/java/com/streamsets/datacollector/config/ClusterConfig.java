@@ -32,7 +32,7 @@ public class ClusterConfig {
       dependencies = {
           @Dependency(
               configName = "^executionMode",
-              triggeredByValues = {"BATCH", "STREAMING"}
+              triggeredByValues = {"BATCH", "STREAMING", "SQL"}
            )
       }
   )

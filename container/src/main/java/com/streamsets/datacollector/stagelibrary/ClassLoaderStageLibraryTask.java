@@ -893,27 +893,26 @@ public class ClassLoaderStageLibraryTask extends AbstractTask implements StageLi
   }
 
   ClassLoader getStageClassLoader(PrivateClassLoaderDefinition stageDefinition) {
-    return Thread.currentThread().getContextClassLoader();
-//    ClassLoader cl = stageDefinition.getStageClassLoader();
-//    if (stageDefinition.isPrivateClassLoader()) {
-//      String key = getClassLoaderKey(cl);
-//      synchronized (privateClassLoaderPool) {
-//        try {
-//          cl = privateClassLoaderPool.borrowObject(key);
-//          LOG.debug("Got a private ClassLoader for '{}', for '{}', active private ClassLoaders='{}'",
-//              key, stageDefinition.getName(), privateClassLoaderPool.getNumActive());
-//        } catch (Exception ex) {
-//          String msg = Utils.format(
-//              "Could not get a private ClassLoader for '{}', for '{}', active private ClassLoaders='{}': {}",
-//              key, stageDefinition.getName(), privateClassLoaderPool.getNumActive(), ex.toString());
-//          LOG.warn(msg, ex);
-//          throw new RuntimeException(msg, ex);
-//        } finally {
-//          updatePrivateClassLoaderPoolMetrics();
-//        }
-//      }
-//    }
-//    return cl;
+    ClassLoader cl = stageDefinition.getStageClassLoader();
+    if (stageDefinition.isPrivateClassLoader()) {
+      String key = getClassLoaderKey(cl);
+      synchronized (privateClassLoaderPool) {
+        try {
+          cl = privateClassLoaderPool.borrowObject(key);
+          LOG.debug("Got a private ClassLoader for '{}', for '{}', active private ClassLoaders='{}'",
+              key, stageDefinition.getName(), privateClassLoaderPool.getNumActive());
+        } catch (Exception ex) {
+          String msg = Utils.format(
+              "Could not get a private ClassLoader for '{}', for '{}', active private ClassLoaders='{}': {}",
+              key, stageDefinition.getName(), privateClassLoaderPool.getNumActive(), ex.toString());
+          LOG.warn(msg, ex);
+          throw new RuntimeException(msg, ex);
+        } finally {
+          updatePrivateClassLoaderPoolMetrics();
+        }
+      }
+    }
+    return cl;
   }
 
   @Override
